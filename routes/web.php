@@ -1,16 +1,23 @@
 <?php
 
-Route::get('/', 'HomeController@index')->name('home');
 
-Route::prefix('admin')
-    ->name('admin.')
-    ->middleware('admin')
-    ->namespace('Admin')
-    ->group(function () {
-        Route::get('/', 'IndexController@show')->name('index');
-        Route::resource('users', 'UsersController');
-        Route::resource('categories', 'CategoriesController');
+Route::group(
+    ['prefix' => App\Http\Middleware\Locale::getLocale(), 'middleware' => 'locale'],
+    function () {
+        Route::get('/', 'HomeController@index')->name('home');
+
+        Route::prefix('admin')
+            ->name('admin.')
+            ->middleware('admin')
+            ->namespace('Admin')
+            ->group(function () {
+                Route::get('/', 'IndexController@show')->name('index');
+                Route::resource('users', 'UsersController');
+                Route::resource('categories', 'CategoriesController');
+            });
     });
+
+
 
 Auth::routes();
 
