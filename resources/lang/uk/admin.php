@@ -29,4 +29,12 @@ return array (
   'user_updated' => 'Користувача відредаговано',
   'user_deleted' => 'Користувача видалено.',
   'status' => 'Статус',
+  'all_categories' => 'Всі категорії',
+  'menu_add_category' => 'Додати категорію',
+  'menu_categories' => 'Категорії',
+  'created_at' => 'Дата створення',
+  'category_edit' => 'Редагування категорії',
+  'create_category' => 'Створення нової категорії',
+  'slug' => 'URL',
+  'enter_slug' => 'Введіть URL',
 );
