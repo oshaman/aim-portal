@@ -1,7 +1,7 @@
 {!! Form::open(['url'=>route('admin.categories.store'), 'class'=>'contact-form', 'method'=>'post', 'files'=>'true']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{trans('admin.category_name')}}</h3>
+        <h3 class="box-title">{{__('admin.category_name')}}</h3>
 
         <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -13,11 +13,11 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    {!! Form::label(trans('admin.ua_category_name')) !!}
+                    {!! Form::label(__('admin.ua_category_name')) !!}
                     {!! Form::text(
                     'properties[uk][name]',
                     null,
-                    ['class'=>'form-control ru-title', 'required'=>'required', 'placeholder'=>trans('admin.enter_category_name')]
+                    ['class'=>'form-control ru-title', 'required'=>'required', 'placeholder'=>__('admin.enter_category_name')]
                     ) !!}
                 </div>
                 <!-- /.form-group -->
@@ -25,11 +25,11 @@
             <!-- /.col -->
             <div class="col-md-6">
                 <div class="form-group">
-                    {!! Form::label(trans('admin.ru_category_name')) !!}
+                    {!! Form::label(__('admin.ru_category_name')) !!}
                     {!! Form::text(
                     'properties[ru][name]',
                     null,
-                    ['class'=>'form-control', 'required'=>'required', 'placeholder'=>trans('admin.enter_category_name')]
+                    ['class'=>'form-control', 'required'=>'required', 'placeholder'=>__('admin.enter_category_name')]
                     ) !!}
                 </div>
             </div>
@@ -43,7 +43,7 @@
 <div class="box box-danger">
 
     <div class="box-header with-border">
-        {!! Form::label('slug', trans('admin.slug')) !!}
+        {!! Form::label('slug', __('admin.slug')) !!}
     </div>
     <div class="form-group">
         <div class="box-body">
@@ -53,7 +53,7 @@
                 {!! Form::text(
                 'slug',
                  null,
-                 ['class'=>'form-control eng-alias', 'required'=>'required', 'placeholder'=>trans('admin.enter_slug')])
+                 ['class'=>'form-control eng-alias', 'required'=>'required', 'placeholder'=>__('admin.enter_slug')])
                   !!}
             </div>
         </div>
@@ -63,7 +63,7 @@
 <div class="box box-info">
 
     <div class="box-header with-border">
-        {!! Form::label('image', trans('admin.image')) !!}
+        {!! Form::label('image', __('admin.image')) !!}
         <small>{{ __('admin.category_image_recommendations') }}</small>
     </div>
     <div class="form-group">
@@ -92,22 +92,21 @@
 
 <div class="box box-success">
     <div class="box-header with-border">
-        {!! Form::label('slug', trans('admin.category_parent')) !!}
+        {!! Form::label('slug', __('admin.category_parent')) !!}
     </div>
     <div class="form-group">
         <div class="box-body">
-            <div class="input-group">
+            <div class="form-group">
                 {{Form::select('parent_id',
                       $categories,
                       null,
-                      ['class' => 'form-control select2','data-placeholder'=>trans('admin.all_categories')])
+                      ['class' => 'form-control select2','placeholder'=>__('admin.all_categories')])
             }}
             </div>
             <div class="checkbox box-footer">
-                {{--{!! Form::label('approved', trans('admin.approved')) !!}--}}
                 <label>
                     {{Form::checkbox('approved', true, null, ['class'=>'minimal'])}}
-                    {{ trans('admin.category_approved') }}
+                    {{ __('admin.category_approved') }}
                 </label>
             </div>
         </div>
@@ -115,6 +114,6 @@
 </div>
 <!-- Submit -->
 <div class="box-footer">
-    {!! Form::button(trans('admin.create'), ['class' => 'btn btn-primary','type'=>'submit']) !!}
+    {!! Form::button(__('admin.create'), ['class' => 'btn btn-primary','type'=>'submit']) !!}
 </div>
 {!! Form::close() !!}

@@ -22,7 +22,7 @@ class CreateCategoryPropertiesTable extends Migration
             $table->string('name', 64);
             $table->enum('locale', ['ru', 'uk']);
 
-            $table->unique('locale', 'category_id');
+            $table->unique(['locale', 'category_id']);
 
             $table->timestamps();
         });

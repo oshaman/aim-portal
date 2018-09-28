@@ -10,6 +10,10 @@ use Illuminate\Validation\Rule;
 
 class CategoriesController extends AdminController
 {
+    public function __construct()
+    {
+        $this->jss = '<script>$(function () {$(\'.select2\').select2()})</script>';
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +24,8 @@ class CategoriesController extends AdminController
         $this->checkPermission();
 
         $this->title = trans('admin.menu_categories');
-        $categories = Category::paginate(10);
+        $categories = Category::with('image')->paginate(10);
+
         $this->content = view('admin.categories.index')->with(compact('categories'))->render();
         return $this->renderOutput();
     }
@@ -53,7 +58,7 @@ class CategoriesController extends AdminController
         $this->checkPermission();
 
         $this->validate($request, [
-            'parent_id' => 'nullable|number|between:1,1000',
+            'parent_id' => 'nullable|numeric|between:1,1000',
             'slug' => ['required', 'between:4,255', 'regex:#^[\w-]#', 'unique:categories,slug'],
             'properties' => [
                 'required',
@@ -68,13 +73,14 @@ class CategoriesController extends AdminController
             'imgtitle' => ['string', 'nullable', 'max:255'],
         ]);
 
-        dd($request->all());
-
         $category = Category::add($request->all());
         $category->toggleStatus($request->get('approved'));
         $category->setProperties($request->get('properties'));
+        $category->uploadImage($request);
 
-        return redirect()->route('categories.index')->with(['status' => trans('admin.category_created')]);
+        return redirect()
+            ->route('admin.categories.index')
+            ->with(['status' => trans('admin.category_created')]);
     }
 
     /**
@@ -86,7 +92,6 @@ class CategoriesController extends AdminController
     public function show($id)
     {
         $this->checkPermission();
-
     }
 
     /**
@@ -95,9 +100,19 @@ class CategoriesController extends AdminController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
         $this->checkPermission();
+
+        $category->load(['image', 'property']);
+
+        $this->title = trans('admin.edit_category');
+        $categories = Category::getAll()->where('id', '<>', $category->id)->pluck('name', 'id');
+
+        $this->content = view('admin.categories.edit')
+                            ->with(compact('categories', 'category'))
+                            ->render();
+        return $this->renderOutput();
 
     }
 

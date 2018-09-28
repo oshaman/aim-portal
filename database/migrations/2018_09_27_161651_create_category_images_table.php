@@ -20,8 +20,8 @@ class CreateCategoryImagesTable extends Migration
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
             $table->string('path')->nullable()->default(null);
-            $table->string('alt')->nullable()->default(null);
-            $table->string('title')->nullable()->default(null);
+            $table->string('imgalt')->nullable()->default(null);
+            $table->string('imgtitle')->nullable()->default(null);
 
             $table->timestamps();
         });

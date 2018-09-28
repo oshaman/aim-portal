@@ -11,14 +11,9 @@ class Category extends Model
     const IS_PUBLIC = 1;
     protected $fillable = ['parent_id', 'slug'];
 
-    public function propertie()
+    public function property()
     {
         return $this->hasMany(CategoryProperty::class, 'category_id');
-    }
-
-    public function mainProperties()
-    {
-        return $this->hasMany(CategoryProperty::class, 'category_id')->where('locale', app()->getLocale());
     }
 
     public function image()
@@ -38,9 +33,9 @@ class Category extends Model
     public function setProperties($properties)
     {
         foreach ($properties as $locale => $name) {
-            $this->propertie()->create([
+            $this->property()->create([
                 'locale' => $locale,
-                'name' => $name->name,
+                'name' => $name['name'],
             ]);
         }
     }
@@ -69,7 +64,7 @@ class Category extends Model
     public function removeImage()
     {
         if (!empty($this->image->path)) {
-            Storage::delete('uploads/categories/' . $this->image->path);
+            Storage::disc('public')->delete('categories/' . $this->image->path);
         }
     }
 
@@ -82,20 +77,20 @@ class Category extends Model
 
         $this->removeImage();
         $filename = str_random(10) . time() . '.' . $image->extension();
-        $image->storeAs('uploads/categories', $filename);
-        $this->image->save(
+        $image->storeAs('categories', $filename, 'public');
+        $this->image()->updateOrCreate(
             [
                 'path'=>$filename,
-                'alt'=>$request->get('alt'),
-                'title'=>$request->get('title'),
+                'imgalt'=>$request->get('imgalt'),
+                'imgtitle'=>$request->get('imgtitle'),
             ]
         );
     }
 
     public function getImage()
     {
-        if ($this->image->path == null) {
-            return '/img/no-image.png';
+        if (empty($this->image->path)) {
+            return config('settings.no_image');
         }
 
         return '/uploads/categories/' . $this->image->path;
@@ -103,13 +98,29 @@ class Category extends Model
 
     public static function getAll()
     {
-        $categories = self::with('mainProperties')->get();
+        $categories = self::whereApproved(1)->with('property')->get();
         $categories->transform(function($item) {
 
             $item->name = $item->mainProperties->name;
 
             return $item;
         });
+
         return $categories;
     }
+
+    public function getMainPropertiesAttribute() {
+        return $this->property()->where('locale', app()->getLocale())->first();
+    }
+
+    public function getUkPropertiesAttribute()
+    {
+        return $this->property()->where('locale', 'uk')->first();
+    }
+
+    public function getRuPropertiesAttribute()
+    {
+        return $this->property()->where('locale', 'ru')->first();
+    }
+
 }

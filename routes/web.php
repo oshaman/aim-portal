@@ -13,7 +13,7 @@ Route::group(
             ->group(function () {
                 Route::get('/', 'IndexController@show')->name('index');
                 Route::resource('users', 'UsersController');
-                Route::resource('categories', 'CategoriesController');
+                Route::resource('categories', 'CategoriesController')->except(['destroy', 'show']);
             });
     });
 
