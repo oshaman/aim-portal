@@ -45,10 +45,10 @@ abstract class AdminController extends Controller
                     ->nickname('menu_users');
                 $menu->item('menu_users')
                         ->add(trans('admin.all_users'), ['route' => 'admin.users.index'])
-                    ->prepend('<i class="fa fa-circle-o"></i> ');
+                    ->prepend('<i class="fa fa-circle-o text-yellow"></i> ');
                 $menu->item('menu_users')
                     ->add(trans('admin.menu_add_user'), ['route'=>'admin.users.create'])
-                    ->prepend('<i class="fa fa-circle-o"></i> ');
+                    ->prepend('<i class="fa fa-circle-o text-yellow"></i> ');
             }
             
             if (Gate::allows('UPDATE_CATEGORIES')) {
@@ -57,10 +57,10 @@ abstract class AdminController extends Controller
                     ->nickname('menu_categories');
                 $menu->item('menu_categories')
                         ->add(trans('admin.all_categories'), ['route' => 'admin.categories.index'])
-                    ->prepend('<i class="fa fa-circle-o"></i> ');
+                    ->prepend('<i class="fa fa-circle-o text-aqua"></i> ');
                 $menu->item('menu_categories')
                     ->add(trans('admin.menu_add_category'), ['route'=>'admin.categories.create'])
-                    ->prepend('<i class="fa fa-circle-o"></i> ');
+                    ->prepend('<i class="fa fa-circle-o text-aqua"></i> ');
             }
 
             if (Gate::allows('ADMIN_USERS')) {
