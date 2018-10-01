@@ -24,7 +24,7 @@ class CategoriesController extends AdminController
         $this->checkPermission();
 
         $this->title = trans('admin.menu_categories');
-        $categories = Category::with('image')->paginate(10);
+        $categories = Category::with('image')->orderBy('id', 'desc')->paginate(10);
 
         $this->content = view('admin.categories.index')->with(compact('categories'))->render();
         return $this->renderOutput();
@@ -74,6 +74,7 @@ class CategoriesController extends AdminController
         ]);
 
         $category = Category::add($request->all());
+        $category->setParent($request->get('parent_id'));
         $category->toggleStatus($request->get('approved'));
         $category->setProperties($request->get('properties'));
         $category->uploadImage($request);
@@ -123,9 +124,44 @@ class CategoriesController extends AdminController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
         $this->checkPermission();
+
+        $this->validate($request, [
+            'parent_id' => 'nullable|numeric|between:1,1000',
+            'slug' => [
+                'required',
+                'between:4,255',
+                'regex:#^[\w-]#',
+                Rule::unique('categories')->ignore($category->slug, 'slug'),
+            ],
+            'properties' => [
+                'required',
+                'array',
+                'size:2',
+                new CategoryKeys
+            ],
+            'properties.*.name' => 'required|string|between:4,255',
+            'approved' => 'boolean|nullable',
+            'image' => 'nullable|mimes:jpg,png,jpeg|max:1024',
+            'imgalt' => ['string', 'nullable', 'max:255'],
+            'imgtitle' => ['string', 'nullable', 'max:255'],
+        ]);
+
+//        dd($request->all(), $category);
+
+
+        $category->edit($request->all());
+        $category->setParent($request->get('parent_id'));
+        $category->toggleStatus($request->get('approved'));
+        $category->setProperties($request->get('properties'));
+        $category->uploadImage($request);
+
+        return redirect()
+            ->route('admin.categories.index')
+            ->with(['status' => trans('admin.category_created')]);
+
 
     }
 

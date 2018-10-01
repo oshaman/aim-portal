@@ -9,7 +9,7 @@ class Category extends Model
 {
     const IS_DRAFT = 0;
     const IS_PUBLIC = 1;
-    protected $fillable = ['parent_id', 'slug'];
+    protected $fillable = ['slug'];
 
     public function property()
     {
@@ -30,14 +30,26 @@ class Category extends Model
         return $category;
     }
 
+    public function edit($fields)
+    {
+        $this->fill($fields);
+        $this->save();
+    }
+
     public function setProperties($properties)
     {
         foreach ($properties as $locale => $name) {
-            $this->property()->create([
-                'locale' => $locale,
-                'name' => $name['name'],
-            ]);
+            $this->property()->updateOrCreate(
+                ['locale' => $locale,],
+                ['name' => $name['name'],]
+            );
         }
+    }
+
+    public function setParent($id)
+    {
+        $this->parent_id = $id;
+        $this->save();
     }
 
     public function setDraft()
@@ -64,7 +76,7 @@ class Category extends Model
     public function removeImage()
     {
         if (!empty($this->image->path)) {
-            Storage::disc('public')->delete('categories/' . $this->image->path);
+            Storage::disk('public')->delete('categories/' . $this->image->path);
         }
     }
 
@@ -79,6 +91,7 @@ class Category extends Model
         $filename = str_random(10) . time() . '.' . $image->extension();
         $image->storeAs('categories', $filename, 'public');
         $this->image()->updateOrCreate(
+            ['category_id' => $this->id],
             [
                 'path'=>$filename,
                 'imgalt'=>$request->get('imgalt'),

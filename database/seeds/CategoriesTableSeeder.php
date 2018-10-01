@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use App\Category;
 
 class CategoriesTableSeeder extends Seeder
 {
@@ -12,40 +13,35 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
+        $data = $this->getArr();
 
-        DB::table('categories')->insert(
-            [
-                ['slug'=>'Budіvnictvo-zhitlovih-budinkіv', 'created_at'=>Carbon::now()],
-                ['slug'=>'Dizajn-іnterjеru', 'created_at'=>Carbon::now()],
-                ['slug'=>'Prodazh-ta-arenda-neruhomostі', 'created_at'=>Carbon::now()],
-                ['slug'=>'Remont-restavracіja-ta-rekonstrukcіja', 'created_at'=>Carbon::now()],
-                ['slug'=>'Budіvelna-tehnіka-ta-obladnannja', 'created_at'=>Carbon::now()],
-                ['slug'=>'Budіvel-nі-materіali', 'created_at'=>Carbon::now()],
-                ['slug'=>'Vodozabezpechennja', 'created_at'=>Carbon::now()],
-                ['slug'=>'Teplozabezpechennja', 'created_at'=>Carbon::now()],
-                ['slug'=>'Ozdobljuvalnі-roboti', 'created_at'=>Carbon::now()],
-                ['slug'=>'Arhіtektura-ta-proektuvannja', 'created_at'=>Carbon::now()],
-                ['slug'=>'Neruhomіst', 'created_at'=>Carbon::now()],
-                ['slug'=>'Elektromontazh', 'created_at'=>Carbon::now()],
-            ]
-        );
+        foreach ($data as $item) {
+            Category::reguard();
+            $category = Category::add($item);
+            $category->setProperties($item['properties']);
+        }
     }
 
     public function getArr()
     {
         return [
-            ['slug'=>'Budіvnictvo-zhitlovih-budinkіv', 'created_at'=>Carbon::now(), 'name'=>'Будівництво житлових будинків',],
-            ['slug'=>'Dizajn-іnterjеru', 'created_at'=>Carbon::now(), 'name'=>'Дизайн інтер\'єру',],
-            ['slug'=>'Prodazh-ta-arenda-neruhomostі', 'created_at'=>Carbon::now(), 'name'=>'Продаж та аренда нерухомості',],
-            ['slug'=>'Remont-restavracіja-ta-rekonstrukcіja', 'created_at'=>Carbon::now(), 'name'=>'Ремонт, реставрація та реконструкція',],
-            ['slug'=>'Budіvelna-tehnіka-ta-obladnannja', 'created_at'=>Carbon::now(), 'name'=>'Будівельна техніка та обладнання',],
-            ['slug'=>'Budіvel-nі-materіali', 'created_at'=>Carbon::now(), 'name'=>'Будівельні матеріали',],
-            ['slug'=>'Vodozabezpechennja', 'created_at'=>Carbon::now(), 'name'=>'Водозабезпечення',],
-            ['slug'=>'Teplozabezpechennja', 'created_at'=>Carbon::now(), 'name'=>'Теплозабезпечення',],
-            ['slug'=>'Ozdobljuvalnі-roboti', 'created_at'=>Carbon::now(), 'name'=>'Оздоблювальні роботи',],
-            ['slug'=>'Arhіtektura-ta-proektuvannja', 'created_at'=>Carbon::now(), 'name'=>'Архітектура та проектування',],
-            ['slug'=>'Neruhomіst', 'created_at'=>Carbon::now(), 'name'=>'Нерухомість',],
-            ['slug'=>'Elektromontazh', 'created_at'=>Carbon::now(), 'name'=>'Електромонтаж',],
+            ['slug' => 'socialni-poslugi', 'properties' => ['uk' => ['name' => 'Соціальні послуги'], 'ru' => ['name' => 'Соціальні послуги'],]],
+            ['slug' => 'budіvnictvo', 'properties' => ['uk' => ['name' => 'Будівництво'], 'ru' => ['name' => 'Будівництво'],]],
+            ['slug' => 'budіvnictvo-zhitlovih-budinkіv', 'properties' => ['uk' => ['name' => 'Будівництво житлових будинків'], 'ru' => ['name' => 'Будівництво житлових будинків'],]],
+            ['slug' => 'dizajn-іnterjеru', 'properties' => ['uk' => ['name' => 'Дизайн інтер\'єру'], 'ru' => ['name' => 'Дизайн інтер\'єру'],]],
+            ['slug' => 'prodazh-ta-arenda-neruhomostі', 'properties' => ['uk' => ['name' => 'Продаж та аренда нерухомості'], 'ru' => ['name' => 'Продаж та аренда нерухомості'],]],
+            ['slug' => 'remont-restavracіja-ta-rekonstrukcіja', 'properties' => ['uk' => ['name' => 'Ремонт, реставрація та реконструкція'], 'ru' => ['name' => 'Ремонт, реставрація та реконструкція'],]],
+            ['slug' => 'budіvelna-tehnіka-ta-obladnannja', 'properties' => ['uk' => ['name' => 'Будівельна техніка та обладнання'], 'ru' => ['name' => 'Будівельна техніка та обладнання'],]],
+            ['slug' => 'budіvel-nі-materіali', 'properties' => ['uk' => ['name' => 'Будівельні матеріали'], 'ru' => ['name' => 'Будівельні матеріали'],]],
+            ['slug' => 'vodozabezpechennja', 'properties' => ['uk' => ['name' => 'Водозабезпечення'], 'ru' => ['name' => 'Водозабезпечення'],]],
+            ['slug' => 'teplozabezpechennja', 'properties' => ['uk' => ['name' => 'Теплозабезпечення'], 'ru' => ['name' => 'Теплозабезпечення'],]],
+            ['slug' => 'ozdobljuvalnі-roboti', 'properties' => ['uk' => ['name' => 'Оздоблювальні роботи'], 'ru' => ['name' => 'Оздоблювальні роботи'],]],
+            ['slug' => 'arhіtektura-ta-proektuvannja', 'properties' => ['uk' => ['name' => 'Архітектура та проектування'], 'ru' => ['name' => 'Архітектура та проектування'],]],
+            ['slug' => 'neruhomіst', 'properties' => ['uk' => ['name' => 'Нерухомість'], 'ru' => ['name' => 'Нерухомість'],]],
+            ['slug' => 'elektromontazh', 'properties' => ['uk' => ['name' => 'Електромонтаж'], 'ru' => ['name' => 'Електромонтаж'],]],
+            ['slug' => 'ekskursiyi', 'properties' => ['uk' => ['name' => 'Екскурсії'], 'ru' => ['name' => 'Екскурсії'],]],
+            ['slug' => 'bezkoshtovni-kursi', 'properties' => ['uk' => ['name' => 'Безкоштовні курси'], 'ru' => ['name' => 'Безкоштовні курси'],]],
+            ['slug' => 'yuridichni-konsultaciyi', 'properties' => ['uk' => ['name' => 'Юридичні консультації'], 'ru' => ['name' => 'Юридичні консультації'],]],
         ];
     }
 }

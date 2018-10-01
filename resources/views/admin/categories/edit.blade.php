@@ -22,7 +22,7 @@
                     {!! Form::text(
                     'properties[uk][name]',
                     $category->ukProperties->name,
-                    ['class'=>'form-control ru-title', 'required'=>'required', 'placeholder'=>__('admin.enter_category_name')]
+                    ['class'=>'form-control', 'required'=>'required', 'placeholder'=>__('admin.enter_category_name')]
                     ) !!}
                 </div>
                 <!-- /.form-group -->
@@ -58,7 +58,7 @@
                 {!! Form::text(
                 'slug',
                  $category->slug,
-                 ['class'=>'form-control eng-alias', 'required'=>'required', 'placeholder'=>__('admin.enter_slug')])
+                 ['class'=>'form-control', 'required'=>'required', 'placeholder'=>__('admin.enter_slug')])
                   !!}
             </div>
         </div>
@@ -119,6 +119,6 @@
 </div>
 <!-- Submit -->
 <div class="box-footer">
-    {!! Form::button(__('admin.create'), ['class' => 'btn btn-primary','type'=>'submit']) !!}
+    {!! Form::button(__('admin.edit'), ['class' => 'btn btn-primary','type'=>'submit']) !!}
 </div>
 {!! Form::close() !!}
