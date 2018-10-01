@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Policies\ServicePolicy;
+use App\Service;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Service::class => ServicePolicy::class
     ];
 
     /**
@@ -35,6 +37,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('UPDATE_CATEGORIES', function ($user) {
             return $user->canDo('UPDATE_CATEGORIES');
+        });
+
+        Gate::define('UPDATE_SERVICES', function ($user) {
+            return $user->canDo('UPDATE_SERVICES');
         });
     }
 }

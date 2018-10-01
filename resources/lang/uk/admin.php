@@ -49,4 +49,5 @@ return array (
   'image' => 'Основне зображення',
   'category_image_recommendations' => 'Файл у форматі jpeg, jpg, png(653х415, не більше 1Мб)',
   'edit_category' => 'Редагування категорії',
+  'self_delete' => 'Ви не можете видалити власний аккаунт.',
 );

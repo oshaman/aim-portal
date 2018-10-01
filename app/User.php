@@ -74,7 +74,13 @@ class User extends Authenticatable
 
     public function remove()
     {
+
+        if(auth()->user()->id === $this->id){
+            return ['status' => trans('admin.self_delete')];
+        }
+
         $this->delete();
+        return ['status' => trans('admin.user_deleted')];
     }
 
     public function verifyUser()

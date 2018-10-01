@@ -8,4 +8,5 @@ return array (
   'EDIT_PERMISSIONS' => 'Редагування привілеїв',
   'EDIT_USERS' => 'Редагування користувачів',
   'UPDATE_CATEGORIES' => 'Редагування категорій',
+  'UPDATE_SERVICES' => 'Управління послугами',
 );

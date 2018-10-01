@@ -14,6 +14,7 @@ Route::group(
                 Route::get('/', 'IndexController@show')->name('index');
                 Route::resource('users', 'UsersController');
                 Route::resource('categories', 'CategoriesController')->except(['destroy', 'show']);
+                Route::resource('services', 'ServicesController');
             });
     });
 

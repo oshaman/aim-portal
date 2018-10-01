@@ -138,8 +138,8 @@ class UsersController extends AdminController
     {
         $this->checkPermission();
 
-        $user->remove();
-        return redirect()->route('admin.users.index')->with(['status' => trans('admin.user_deleted')]);
+        $result = $user->remove();
+        return redirect()->route('admin.users.index')->with($result);
     }
 
     protected function checkPermission()

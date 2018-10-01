@@ -63,6 +63,16 @@ abstract class AdminController extends Controller
                     ->prepend('<i class="fa fa-circle-o text-aqua"></i> ');
             }
 
+            if (Gate::allows('UPDATE_SERVICES')) {
+                $menu->add(trans('services.menu'), ['class' => 'services treeview'])
+                    ->prepend('<i class="fa fa-list"></i> <span>')
+                    ->nickname('menu_services');
+                $menu->item('menu_services')
+                    ->add(trans('services.all'), ['route' => 'admin.services.index'])
+                    ->prepend('<i class="fa fa-circle-o text-aqua"></i> ');
+            }
+
+            //  translations
             if (Gate::allows('ADMIN_USERS')) {
                 $menu->add(trans('admin.menu_systems'), array('url' => 'admin/translations', 'class' => 'translations'))
                     ->prepend('<i class="fa fa-list-alt"></i> <span>');
