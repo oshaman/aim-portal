@@ -16,6 +16,11 @@ class Category extends Model
         return $this->hasMany(CategoryProperty::class, 'category_id');
     }
 
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
+
     public function image()
     {
         return $this->hasOne(CategoryImage::class);
@@ -93,9 +98,9 @@ class Category extends Model
         $this->image()->updateOrCreate(
             ['category_id' => $this->id],
             [
-                'path'=>$filename,
-                'imgalt'=>$request->get('imgalt'),
-                'imgtitle'=>$request->get('imgtitle'),
+                'path' => $filename,
+                'imgalt' => $request->get('imgalt'),
+                'imgtitle' => $request->get('imgtitle'),
             ]
         );
     }
@@ -112,17 +117,41 @@ class Category extends Model
     public static function getAll()
     {
         $categories = self::whereApproved(1)->with('property')->get();
-        $categories->transform(function($item) {
 
-            $item->name = $item->mainProperties->name;
-
-            return $item;
-        });
+        $categories = self::getNames($categories);
 
         return $categories;
     }
 
-    public function getMainPropertiesAttribute() {
+    public static function getAvailable($category)
+    {
+        $categories = self::whereApproved(1)
+            ->where('id', '<>', $category->id)
+            ->whereNotIn('id', $category->children->pluck('id')->toArray())
+            ->with('property')
+            ->get();
+
+        $categories = self::getNames($categories);
+
+        return $categories;
+    }
+
+    public static function getNames($categories)
+    {
+        if ($categories->isNotEmpty()) {
+            $categories->transform(function ($item) {
+
+                $item->name = $item->mainProperties->name;
+
+                return $item;
+            });
+        }
+
+        return $categories;
+    }
+
+    public function getMainPropertiesAttribute()
+    {
         return $this->property()->where('locale', app()->getLocale())->first();
     }
 

@@ -19,7 +19,7 @@ class CategoriesController extends AdminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->checkPermission();
 
@@ -105,10 +105,9 @@ class CategoriesController extends AdminController
     {
         $this->checkPermission();
 
-        $category->load(['image', 'property']);
-
+        $category->load(['image', 'property', 'children']);
         $this->title = trans('admin.edit_category');
-        $categories = Category::getAll()->where('id', '<>', $category->id)->pluck('name', 'id');
+        $categories = Category::getAvailable($category)->pluck('name', 'id');
 
         $this->content = view('admin.categories.edit')
                             ->with(compact('categories', 'category'))

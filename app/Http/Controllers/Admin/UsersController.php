@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Permission;
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Gate;
@@ -24,7 +25,8 @@ class UsersController extends AdminController
         $this->checkPermission();
 
         $this->title = trans('admin.users');
-        $users = User::paginate(10);
+        $users = User::with('roles')->paginate(10);
+
         $this->content = view('admin.users.index')->with(compact('users'))->render();
         return $this->renderOutput();
     }
@@ -39,9 +41,9 @@ class UsersController extends AdminController
         $this->checkPermission();
 
         $this->title = trans('admin.add_user');
-        $permissions = Permission::getPerms()->pluck('name', 'id');
+        $roles = Role::getAll()->pluck('name', 'id');
 
-        $this->content = view('admin.users.create')->with(compact('permissions'))->render();
+        $this->content = view('admin.users.create')->with(compact('roles'))->render();
         return $this->renderOutput();
     }
 
@@ -58,14 +60,14 @@ class UsersController extends AdminController
         $this->validate($request, [
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
-            'permissions' => 'nullable|array',
-            'permissions.*' => 'numeric|between:1,1000'
+            'roles' => 'nullable|array',
+            'roles.*' => 'numeric|between:1,1000'
         ]);
 
         $user = User::add($request->all());
         $user->generatePassword($request->get('password'));
         $user->verifyUser();
-        $user->setPermissions($request->get('permissions'));
+        $user->setRoles($request->get('roles'));
         return redirect()->route('admin.users.index')->with(['status' => trans('admin.user_created')]);
     }
 
@@ -90,12 +92,12 @@ class UsersController extends AdminController
     {
         $this->checkPermission();
 
-        $permissions = Permission::getPerms()->pluck('name', 'id');
+        $roles = Role::getAll()->pluck('name', 'id');
 
-        $availablePermissions = $user->permissions->pluck('id')->all();
+        $availableRoles = $user->roles->pluck('id')->all();
 
         $this->content = view('admin.users.edit')
-                            ->with(compact('availablePermissions', 'user', 'permissions'))
+                            ->with(compact('availableRoles', 'user', 'roles'))
                             ->render();
         return $this->renderOutput();
     }
@@ -118,13 +120,13 @@ class UsersController extends AdminController
                 Rule::unique('users')->ignore($user->id)
                 ],
             'password' => 'nullable|string|min:6',
-            'permissions' => 'nullable|array',
-            'permissions.*' => 'numeric|between:1,1000'
+            'roles' => 'nullable|array',
+            'roles.*' => 'numeric|between:1,1000'
         ]);
 
         $user->edit($request->all());
         $user->generatePassword($request->get('password'));
-        $user->setPermissions($request->get('permissions'));
+        $user->setRoles($request->get('roles'));
         return redirect()->back()->with(['status' => trans('admin.user_updated')]);
     }
 

@@ -8,18 +8,9 @@ class Permission extends Model
 {
     protected $fillable = ['name'];
 
-    public static function getPerms()
+    public function roles()
     {
-        $permissions = self::all();
-        $permissions->transform(function($item) {
-
-            $item->name = trans('permissions.'.$item->name);
-
-            return $item;
-        });
-        return $permissions;
+        return $this->belongsToMany(Role::class,'permission_role');
     }
-
-
 
 }

@@ -18,12 +18,12 @@
             </div>
         </div>
         <div class="form-group">
-            {!! Form::label('permissions', trans('admin.permissions')) !!}
+            {!! Form::label('roles', trans('admin.roles')) !!}
 
-            {{Form::select('permissions[]',
-                      $permissions,
-                      $availablePermissions,
-                      ['class' => 'form-control select2', 'multiple'=>'multiple','data-placeholder'=>trans('admin.enter_permissions')])
+            {{Form::select('roles[]',
+                      $roles,
+                      $availableRoles,
+                      ['class' => 'form-control select2', 'multiple'=>'multiple','data-placeholder'=>trans('roles.enter_roles')])
             }}
         </div>
     </div>

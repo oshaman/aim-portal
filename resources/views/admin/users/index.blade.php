@@ -4,15 +4,13 @@
     </div>
     <!-- /.box-header -->
     <div class="box-body">
-        <div class="form-group">
-            <iframe src="{{asset('images/calendar.svg')}}" width="150px"></iframe>
-        </div>
         {{ $users->links() }}
         <table id="example1" class="table table-bordered table-striped">
             <thead>
             <tr>
                 <th>ID</th>
                 <th>E-mail</th>
+                <th>{{trans('admin.roles')}}</th>
                 <th>{{trans('admin.status')}}</th>
                 <th>{{trans('admin.user_date')}}</th>
                 <th>{{trans('admin.actions')}}</th>
@@ -23,6 +21,15 @@
                 <tr>
                     <td>{{$user->id}}</td>
                     <td>{{$user->email}}</td>
+                    <td>
+                        @foreach($user->roles as $role)
+                            @if('admin' === $role->name)
+                                <span class="label label-danger">{{ trans('roles.' . $role->name) }}</span>
+                            @else
+                                <span class="label label-primary">{{ trans('roles.' . $role->name) }}</span>
+                            @endif
+                        @endforeach
+                    </td>
                     <td>{!! $user->verified ? '<i class="fa fa-thumbs-o-up"></i>' : '<i class="fa fa-thumbs-down"></i>' !!}</td>
                     <td>{{$user->created_at}}</td>
                     <td>

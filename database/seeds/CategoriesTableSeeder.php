@@ -13,35 +13,169 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $data = $this->getArr();
+        $data = $this->getCats();
 
-        foreach ($data as $item) {
-            Category::reguard();
-            $category = Category::add($item);
-            $category->setProperties($item['properties']);
+        foreach($data as $key=>$arr){
+            $id = $this->add($key);
+            if(count($arr)) {
+                foreach ($arr as $item) {
+                    $this->add($item, $id);
+                }
+            }
         }
+
     }
 
-    public function getArr()
+    public function add($item, $parent=false)
     {
-        return [
-            ['slug' => 'socialni-poslugi', 'properties' => ['uk' => ['name' => 'Соціальні послуги'], 'ru' => ['name' => 'Соціальні послуги'],]],
-            ['slug' => 'budіvnictvo', 'properties' => ['uk' => ['name' => 'Будівництво'], 'ru' => ['name' => 'Будівництво'],]],
-            ['slug' => 'budіvnictvo-zhitlovih-budinkіv', 'properties' => ['uk' => ['name' => 'Будівництво житлових будинків'], 'ru' => ['name' => 'Будівництво житлових будинків'],]],
-            ['slug' => 'dizajn-іnterjеru', 'properties' => ['uk' => ['name' => 'Дизайн інтер\'єру'], 'ru' => ['name' => 'Дизайн інтер\'єру'],]],
-            ['slug' => 'prodazh-ta-arenda-neruhomostі', 'properties' => ['uk' => ['name' => 'Продаж та аренда нерухомості'], 'ru' => ['name' => 'Продаж та аренда нерухомості'],]],
-            ['slug' => 'remont-restavracіja-ta-rekonstrukcіja', 'properties' => ['uk' => ['name' => 'Ремонт, реставрація та реконструкція'], 'ru' => ['name' => 'Ремонт, реставрація та реконструкція'],]],
-            ['slug' => 'budіvelna-tehnіka-ta-obladnannja', 'properties' => ['uk' => ['name' => 'Будівельна техніка та обладнання'], 'ru' => ['name' => 'Будівельна техніка та обладнання'],]],
-            ['slug' => 'budіvel-nі-materіali', 'properties' => ['uk' => ['name' => 'Будівельні матеріали'], 'ru' => ['name' => 'Будівельні матеріали'],]],
-            ['slug' => 'vodozabezpechennja', 'properties' => ['uk' => ['name' => 'Водозабезпечення'], 'ru' => ['name' => 'Водозабезпечення'],]],
-            ['slug' => 'teplozabezpechennja', 'properties' => ['uk' => ['name' => 'Теплозабезпечення'], 'ru' => ['name' => 'Теплозабезпечення'],]],
-            ['slug' => 'ozdobljuvalnі-roboti', 'properties' => ['uk' => ['name' => 'Оздоблювальні роботи'], 'ru' => ['name' => 'Оздоблювальні роботи'],]],
-            ['slug' => 'arhіtektura-ta-proektuvannja', 'properties' => ['uk' => ['name' => 'Архітектура та проектування'], 'ru' => ['name' => 'Архітектура та проектування'],]],
-            ['slug' => 'neruhomіst', 'properties' => ['uk' => ['name' => 'Нерухомість'], 'ru' => ['name' => 'Нерухомість'],]],
-            ['slug' => 'elektromontazh', 'properties' => ['uk' => ['name' => 'Електромонтаж'], 'ru' => ['name' => 'Електромонтаж'],]],
-            ['slug' => 'ekskursiyi', 'properties' => ['uk' => ['name' => 'Екскурсії'], 'ru' => ['name' => 'Екскурсії'],]],
-            ['slug' => 'bezkoshtovni-kursi', 'properties' => ['uk' => ['name' => 'Безкоштовні курси'], 'ru' => ['name' => 'Безкоштовні курси'],]],
-            ['slug' => 'yuridichni-konsultaciyi', 'properties' => ['uk' => ['name' => 'Юридичні консультації'], 'ru' => ['name' => 'Юридичні консультації'],]],
+            Category::reguard();
+            $category = Category::add(['slug' => $this->transliterate($item)]);
+            $category->setProperties(['uk' => ['name' => $item], 'ru' => ['name' => $item]]);
+            if($parent) $category->setParent($parent);
+            return $category->id;
+    }
+
+    public function getCats()
+    {
+        return $arr = [
+            'Строительство / ремонт / уборка' => [
+                'Cтроительные услуги',
+                'Дизайн / архитектур',
+                'Отделка / ремонт',
+                'Окна / двери / балкон',
+                'Сантехника / коммуникаци',
+                'Бытовой ремонт / уборка',
+                'Вентиляция / кондиционировани',
+                'Электрик',
+                'Готовые конструкци',
+            ],
+            'Перевозки / аренда транспорта' => [
+
+            ],
+            'Сырьё / материалы' => [
+
+            ],
+            'Красота / здоровье' => [
+                'Стрижки / наращивание волос',
+                'Маникюр / наращивание ногтей',
+                'Макияж / косметология / наращивание ресниц',
+                'Медицина',
+                'Массаж',
+                'Красота / здоровье - прочее',
+                'Услуги психолога',
+            ],
+            'Оборудование' => [
+
+            ],
+            'Развлечения / Искусство / Фото / Видео' => [
+
+            ],
+            'Ремонт и обслуживание техники' => [
+                'Телефоны и смартфоны',
+                'Компьютеры',
+                'Бытовая техника',
+                'Фото и видеоаппаратура',
+                'Тв и видеотехника',
+                'Аудиотехника',
+                'Прочая техника',
+                'Климатическая техника',
+                'Игровые приставки',
+            ],
+            'Прочие услуги' => [
+
+            ],
+
+
+            'Финансовые услуги / партнерство' => [
+
+            ],
+            'Реклама / полиграфия / маркетинг / интернет' => [
+
+            ],
+            'Няни / сиделки' => [
+
+            ],
+            'Образование / Спорт' => [
+
+            ],
+            'Услуги для животных' => [
+
+            ],
+            'Продажа бизнеса' => [
+
+            ],
+            'Туризм / иммиграция' => [
+
+            ],
+            'Услуги переводчиков / набор текста' => [
+
+            ],
+            'Авто / мото услуги' => [
+
+            ],
+            'Сетевой маркетинг' => [
+
+            ],
+            'Юридические услуги' => [
+
+            ],
+            'Прокат товаров' => [
+
+            ],
         ];
     }
+
+    public function transliterate($string)
+    {
+        $str = mb_strtolower($string, 'UTF-8');
+
+        $leter_array = array(
+            'a' => 'а',
+            'b' => 'б',
+            'v' => 'в',
+            'g' => 'г,ґ',
+            'd' => 'д',
+            'e' => 'е,э',
+            'jo' => 'ё',
+            'zh' => 'ж',
+            'z' => 'з',
+            'i' => 'и',
+            'j' => 'й',
+            'k' => 'к',
+            'l' => 'л',
+            'm' => 'м',
+            'n' => 'н',
+            'o' => 'о',
+            'p' => 'п',
+            'r' => 'р',
+            's' => 'с',
+            't' => 'т',
+            'u' => 'у',
+            'f' => 'ф',
+            'kh' => 'х',
+            'ts' => 'ц',
+            'ch' => 'ч',
+            'sh' => 'ш',
+            'shch' => 'щ',
+            'j' => 'ъ',
+            'y' => 'ы',
+            'j' => 'ь',
+            'yu' => 'ю',
+            'ya' => 'я',
+        );
+
+        foreach ($leter_array as $leter => $kyr) {
+            $kyr = explode(',', $kyr);
+
+            $str = str_replace($kyr, $leter, $str);
+        }
+
+        //  A-Za-z0-9-
+        $str = preg_replace('/(\s|[^A-Za-z0-9\-_])+/', '-', $str);
+
+        $str = trim($str, '-');
+
+        return $str;
+    }
+
 }
