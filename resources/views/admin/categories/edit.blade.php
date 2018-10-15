@@ -7,11 +7,6 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">{{__('admin.category_name')}}</h3>
-
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-        </div>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -65,13 +60,17 @@
     </div>
 
 </div>
-<div class="box box-info">
+<div class="box box-info collapsed-box">
 
     <div class="box-header with-border">
         {!! Form::label('image', __('admin.image')) !!}
         <small>{{ __('admin.category_image_recommendations') }}</small>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+            </button>
+        </div>
     </div>
-    <div class="form-group">
+    <div class="form-group col-md-6">
         <div class="box-body">
             <img src="{{ $category->getImage() }}" class="img-fluid img-thumbnail" />
             <div class="input-group">

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
-use Illuminate\Http\Request;
 use Gate;
 
 class IndexController extends AdminController

@@ -31,9 +31,24 @@ Breadcrumbs::for ('admin.categories.create', function ($trail) {
     $trail->push(trans('admin.menu_add_category'), route('admin.categories.create'));
 });
 
-Breadcrumbs::for ('admin.categories.edit', function ($trail, $user) {
-    $trail->parent('admin.categories.index');
-    $trail->push(trans('admin.category_edit'), route('admin.categories.edit', $user->id));
+Breadcrumbs::for ('admin.categories.edit', function ($trail, $category) {
+    if ($category->parent) {
+        $trail->parent('admin.categories.show', $category->parent);
+    } else {
+        $trail->parent('admin.categories.index');
+    }
+    $trail->push($category->MainProperties->name, route('admin.categories.edit', $category->id));
+});
+
+Breadcrumbs::for ('admin.categories.show', function ($trail, $category) {
+
+    if ($category->parent) {
+        $trail->parent('admin.categories.show', $category->parent);
+    } else {
+        $trail->parent('admin.categories.index');
+    }
+
+    $trail->push($category->MainProperties->name, route('admin.categories.edit', $category->id));
 });
 //----------------------------------------------------------
 
@@ -45,13 +60,7 @@ Breadcrumbs::for ('translations', function ($trail) {
 });
 
 
-/*Breadcrumbs::for ('category', function ($trail, $category) {
-    if ($category->parent) {
-        $trail->parent('category', $category->parent);
-    }
-    $trail->push($category->name, $category->parent);
-});
-
+/*
 Breadcrumbs::for ('service', function ($trail, $service) {
     $trail->parent('category', $service->category);
     $trail->push($service->name, url('service'));

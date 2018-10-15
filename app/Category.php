@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Storage;
+use App\Traits\ContentsHandler;
 
 class Category extends Model
 {
+    use ContentsHandler;
+
     const IS_DRAFT = 0;
     const IS_PUBLIC = 1;
     protected $fillable = ['slug'];
@@ -19,6 +22,11 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function image()
@@ -165,4 +173,13 @@ class Category extends Model
         return $this->property()->where('locale', 'ru')->first();
     }
 
+    public function getChildrenIds()
+    {
+        return $this->children->pluck(['id'])->all();
+    }
+
+    public static function getMain()
+    {
+        return self::with('image')->whereNull('parent_id')->orderBy('id', 'desc')->paginate(10);
+    }
 }

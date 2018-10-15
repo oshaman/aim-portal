@@ -21,6 +21,7 @@ class PermissionsTableSeeder extends Seeder
                 ['name'=>'UPDATE_CATEGORIES'],
                 ['name'=>'UPDATE_TAGS'],
                 ['name'=>'UPDATE_SERVICES'],
+                ['name'=>'VIEW_ACCOUNT'],
             ]
         );
     }

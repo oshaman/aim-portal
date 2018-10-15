@@ -2,11 +2,6 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">{{__('admin.category_name')}}</h3>
-
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-        </div>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -60,16 +55,20 @@
     </div>
 
 </div>
-<div class="box box-info">
+<div class="box box-info collapsed-box">
 
     <div class="box-header with-border">
         {!! Form::label('image', __('admin.image')) !!}
         <small>{{ __('admin.category_image_recommendations') }}</small>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+            </button>
+        </div>
     </div>
     <div class="form-group">
         <div class="box-body">
 
-            <div class="input-group">
+            <div class="input-group col-md-6">
                 <span class="input-group-addon"><i class="fa fa-image"></i></span>
                 {!! Form::file('image', ['accept'=>'image/*', 'id'=>'image', 'class'=>'form-control']) !!}
             </div>

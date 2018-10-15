@@ -24,7 +24,7 @@ class CategoriesController extends AdminController
         $this->checkPermission();
 
         $this->title = trans('admin.menu_categories');
-        $categories = Category::with('image')->orderBy('id', 'desc')->paginate(10);
+        $categories = Category::getMain();
 
         $this->content = view('admin.categories.index')->with(compact('categories'))->render();
         return $this->renderOutput();
@@ -90,9 +90,17 @@ class CategoriesController extends AdminController
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
         $this->checkPermission();
+
+        $category->load(['image', 'property', 'children']);
+        $this->title = trans('admin.show_category');
+
+        $this->content = view('admin.categories.show')
+            ->with(compact('category'))
+            ->render();
+        return $this->renderOutput();
     }
 
     /**
@@ -128,7 +136,12 @@ class CategoriesController extends AdminController
         $this->checkPermission();
 
         $this->validate($request, [
-            'parent_id' => 'nullable|numeric|between:1,1000',
+            'parent_id' => [
+                'nullable',
+                'numeric',
+                'between:1,1000',
+                Rule::notIn($category->getChildrenIds()),
+            ],
             'slug' => [
                 'required',
                 'between:4,255',
@@ -147,9 +160,6 @@ class CategoriesController extends AdminController
             'imgalt' => ['string', 'nullable', 'max:255'],
             'imgtitle' => ['string', 'nullable', 'max:255'],
         ]);
-
-//        dd($request->all(), $category);
-
 
         $category->edit($request->all());
         $category->setParent($request->get('parent_id'));

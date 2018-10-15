@@ -13,8 +13,16 @@ Route::group(
             ->group(function () {
                 Route::get('/', 'IndexController@show')->name('index');
                 Route::resource('users', 'UsersController');
-                Route::resource('categories', 'CategoriesController')->except(['destroy', 'show']);
+                Route::resource('categories', 'CategoriesController')->except(['destroy']);
                 Route::resource('services', 'ServicesController');
+            });
+
+        Route::prefix('account')
+            ->name('account.')
+            ->middleware('account')
+            ->namespace('Account')
+            ->group(function () {
+                Route::get('/', 'IndexController@show')->name('index');
             });
     });
 

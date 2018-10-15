@@ -24,12 +24,17 @@
                     <td>
                         <img src="{{$category->getImage()}}" class="direct-chat-img" />
                     </td>
-                    <td>{{$category->mainProperties->name}}</td>
+                    <td>
+                        <a href="{{route('admin.categories.show', $category->id)}}" class="product-title">
+                            {{$category->mainProperties->name}}
+                        </a>
+                    </td>
                     <td>{{$category->slug}}</td>
                     <td>{!! $category->approved ? '<i class="fa fa-thumbs-o-up"></i>' : '<i class="fa fa-thumbs-down"></i>' !!}</td>
                     <td>{{$category->created_at}}</td>
                     <td>
                         <a href="{{route('admin.categories.edit', $category->id)}}" class="fa fa-pencil" title="{{__('admin.edit')}}"></a>
+                        <a href="{{route('admin.categories.show', $category->id)}}" class="fa fa-eye" title="{{__('admin.show')}}"></a>
                     </td>
                 </tr>
             @endforeach
